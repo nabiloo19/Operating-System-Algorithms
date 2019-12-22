@@ -1,0 +1,93 @@
+package Lab3;
+
+import java.util.Scanner;
+
+public class Srtf {
+
+    Scanner in = new Scanner(System.in);
+
+    public void calSrtf() {
+
+        System.out.print("\nHow many no of Processes:- ");
+        int n = in.nextInt();
+
+        int pro[][] = new int[n + 1][4];//pro[][0] is the AT array,[][1] - RT,[][2] - WT,[][3] - TT
+
+        System.out.println("\nEnter Cpu Bound And Arrival Time.\n!"
+                + "press Tab between CB and AT!");
+
+        System.out.println("\nPro\tCB\tAT");
+        System.out.println("```\t```\t```");
+        for (int i = 1; i <= n; i++) {
+            System.out.print("P" + i + "\t");
+            pro[i][1] = in.nextInt();
+            pro[i][0] = in.nextInt();
+        }
+        System.out.println();
+
+        //Calculation of Total Time and Initialization of Time Chart array
+        int total_time = 0;
+        for (int i = 1; i <= n; i++) {
+            total_time += pro[i][1];
+        }
+        int time_chart[] = new int[total_time];
+
+        for (int i = 0; i < total_time; i++) {
+            //Selection of shortest process which has arrived
+            int sel_proc = 0;
+            int min = 99999;
+            for (int j = 1; j <= n; j++) {
+                if (pro[j][0] <= i)//Condition to check if Process has arrived
+                {
+                    if (pro[j][1] < min && pro[j][1] != 0) {
+                        min = pro[j][1];
+                        sel_proc = j;
+                    }
+                }
+            }
+
+            //Assign selected process to current time in the Chart
+            time_chart[i] = sel_proc;
+
+            //Decrement Remaining Time of selected process by 1 since it has been assigned the CPU for 1 unit of time
+            pro[sel_proc][1]--;
+
+            //WT and TT Calculation
+            for (int j = 1; j <= n; j++) {
+                if (pro[j][0] <= i) {
+                    if (pro[j][1] != 0) {
+                        pro[j][3]++;//If process has arrived and it has not already completed execution its TT is incremented by 1
+                        if (j != sel_proc)//If the process has not been currently assigned the CPU and has arrived its WT is incremented by 1
+                        {
+                            pro[j][2]++;
+                        }
+                    } else if (j == sel_proc)//This is a special case in which the process has been assigned CPU and has completed its execution
+                    {
+                        pro[j][3]++;
+                    }
+                }
+            }
+
+        }
+        System.out.println();
+        System.out.println();
+
+        //Printing the WT and TT for each Process
+        System.out.println("\n\nPro\tCB\tAT\tWT\tTT\tRT");
+        for (int i = 1; i <= n; i++) {
+            System.out.println("P" + i + "\t" + pro[i][1] + "\t" + pro[i][0] + "\t" + pro[i][2] + "\t" + pro[i][3]);
+        }
+
+        //Printing the average WT & TT
+        float WT = 0, TT = 0;
+        for (int i = 1; i <= n; i++) {
+            WT += pro[i][2];
+            TT += pro[i][3];
+        }
+        WT /= n;
+        TT /= n;
+        System.out.println("The Average WT is: " + WT + "ms");
+        System.out.println("The Average TT is: " + TT + "ms");
+    }
+
+}

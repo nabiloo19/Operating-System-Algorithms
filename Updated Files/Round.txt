@@ -1,0 +1,110 @@
+package Lab2;
+
+import java.util.Scanner;
+
+public class Round {
+
+    Scanner in = new Scanner(System.in);
+
+    public void calRound() {
+
+        // !!! Response time not solved
+        
+        int temp = 0, proFinish, i = 0, t = 1;
+
+        float avgWt = 0, avgTa = 0, avgRt = 0;
+        int wt = 0, ta = 0, qt, ft = 0;
+
+        System.out.print("\nHow many no of Processes:- ");
+        int n = in.nextInt();
+
+        proFinish = n;//make them equall initially
+        
+        int pro[] = new int[n];    // process
+        int[] at = new int[n];//arival time
+        int[] cb = new int[n];//cpu bound
+        int[] rt = new int[n];//response time
+
+        int[] tempBound = new int[n];//temporary bound which holds value when > qt 
+
+        System.out.println("\nEnter Cpu Bound And Arrival Time.\n!press Tab between CB and AT!");
+        System.out.println("\nPro\tCB\tAT");
+        System.out.println("```\t```\t```");
+
+        for (; i < n; i++) {
+            System.out.print("P" + i + "\t");
+
+            cb[i] = in.nextInt();
+            at[i] = in.nextInt();
+            tempBound[i] = cb[i];
+        }
+
+        System.out.print("Enter Quantum Time:");
+        qt = in.nextInt();
+
+        //sorting with their arival time
+        for (; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (at[i] > at[j]) {
+                    temp = at[i];
+                    at[i] = at[j];
+                    at[j] = temp;
+                    temp = cb[i];
+                    cb[i] = cb[j];
+                    cb[j] = temp;
+                    temp = pro[i];
+                    pro[i] = pro[j];
+                    pro[j] = temp;
+                }
+            }
+        }
+
+        System.out.println("\n\nPro\tCB\tAT\tWT\tTT\tRT");
+        i = 0;
+        while (proFinish != 0) {
+            if (i >= 0 && t != -1) {
+                rt[i] = ft - at[i];
+            }
+
+            if (tempBound[i] <= qt && tempBound[i] > 0) {
+                ft += tempBound[i]; //If the condition is correct, then the finishing time is nothing but cpu bounds
+                tempBound[i] = 0;//turned into 0 since it's done and will be used for termination
+                temp = 1;//turned into 1 since it's done and will be used for termination
+                
+            } else if (tempBound[i] > qt) {
+                
+                tempBound[i] -= qt;
+                ft += qt;
+
+            }
+
+            if (tempBound[i] == 0 && temp == 1) { //If a process was done with CPU, it will enter here
+                proFinish--;//decrement by one for termination
+                ta = ft - at[i];//turn around time calculated
+                wt = ta - cb[i];//waiting time calculated
+                
+                System.out.println("P" + i + "\t" + cb[i] + "\t" + at[i] + "\t" + wt + "\t" + ta + "\t" + rt[i]);
+
+                avgWt += ft - at[i] - cb[i];
+                avgTa += ft - at[i];
+                avgRt += rt[i];
+                temp = 0;
+            }
+
+            if (i == n - 1) {
+                i = 0;
+                t = -1;
+            } else if (at[i + 1] <= ft) {//if the arrival time of the previous one is less or equal than the finishing time of its successive: it'll go here
+                i++;
+            } else {
+                i = 0;
+            }
+        }
+
+        System.out.println("\n*Average waiting time: " + (avgWt / n));
+        System.out.println("*Average turnaround time:" + (avgTa / n));
+        System.out.println("*Average response time:" + (avgRt / n));
+
+    }
+
+}

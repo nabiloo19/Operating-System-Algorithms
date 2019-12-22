@@ -1,0 +1,52 @@
+package Lab1
+import java.util.Scanner
+import Lab2.*
+import Lab3.*
+/**
+*
+* @author Team-Lion: Natnael Abebaw,Nabil Mohammed,Minilik Seyoum, Abel
+* Gizachew,Sufyan Mohammed
+*/
+object All {
+  internal var input = Scanner(System.`in`)
+  @JvmStatic fun main(args:Array<String>) {
+    val choice:Int
+    //Object creation for all classes
+    val alg1 = FirstCome()
+    val alg2 = ShortJob()
+    val alg3 = Round()
+    val alg4 = Priority()
+    val alg5 = Srtf()
+    val alg6 = Fifo()
+    /*
+ * @1st, 2nd and 4th Algorithms have the same procedure where sorting algorithms were just rotating.
+ */
+    do
+    {
+      println("->Which Cpu Scheduling Algorithm or Paging Scheduling You Want to Calculate?")
+      println(" 1,First Come First Serve(FCFS)")
+      println(" 2,Shortest Job First(SJF)")
+      println(" 3,Round Robin(RR)")
+      println(" 4,Priority")
+      println(" 5,Shortest Remaining Time First(SRTF)")
+      println(" 6,First in First out(FIFO")
+      println(" 0,Exit")
+      print("Select->")
+      choice = input.nextInt()
+      when (choice) {
+        1 -> alg1.calFirst()
+        2 -> alg2.calShort()
+        3 -> alg3.calRound()
+        4 -> alg4.calPriority()
+        5 -> alg5.calSrtf()
+        6 -> alg6.calFifo()
+        0 -> System.exit(0)
+        else -> println("Invalid Input!")
+      }
+      println("\n->press Any Integer to return, 0 to Exit!")
+      choice = input.nextInt()
+    }
+    while (choice != 0)
+    input.close()
+  }
+}

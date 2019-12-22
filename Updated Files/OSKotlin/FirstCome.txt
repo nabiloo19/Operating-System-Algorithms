@@ -1,0 +1,105 @@
+package Lab1
+import java.util.Scanner
+class FirstCome {
+  internal var `in` = Scanner(System.`in`)
+  fun calFirst() {
+    print("\nHow many no of Processes:- ")
+    val n = `in`.nextInt()
+    val pro = IntArray(n) // process
+    val cb = IntArray(n) // cpu bound
+    val at = IntArray(n) // arrival time
+    val st = IntArray(n) //starting time
+    val ft = IntArray(n) // finishing time
+    val ta = IntArray(n) // turn around time
+    val wt = IntArray(n) // waiting time
+    val rt = IntArray(n) //response time
+    val temp:Int//temporary variable
+    val avgwt = 0f
+    val avgta = 0f
+    val avgrt = 0f
+    println("\nEnter Cpu Bound And Arrival Time.\n!press Tab between CB and AT!")
+    println("\nPro\tCB\tAT")
+    println("```\t```\t```")
+    for (i in 0 until n)
+    {
+      print("P" + i + "\t")
+      cb[i] = `in`.nextInt()
+      at[i] = `in`.nextInt()
+      pro[i] = i
+    }
+    //sorting with their arival time
+    for (i in 0 until n)
+    {
+      for (j in i + 1 until n)
+      {
+        if (at[i] > at[j])
+        {
+          temp = at[i]
+          at[i] = at[j]
+          at[j] = temp
+          temp = cb[i]
+          cb[i] = cb[j]
+          cb[j] = temp
+          temp = pro[i]
+          pro[i] = pro[j]
+          pro[j] = temp
+        }
+      }
+    }
+    // finding finishing & starting times
+    for (i in 0 until n)
+    {
+      if (i == 0)
+      {
+        ft[i] = at[i] + cb[i] //first process finishing time
+        st[i] = at[i] //first process starting time
+      }
+      else
+      {
+        /* we have two conditions
+ 1,arrival time is greater than the previous one
+ 2,if they are equal or less than
+ */
+
+        if (at[i] > ft[i - 1])
+        {
+          ft[i] = at[i] + cb[i]
+          st[i] = at[i]
+        }
+        else
+        {
+          ft[i] = ft[i - 1] + cb[i] //The finishing time of the previous one + the CPU Bound
+          st[i] = ft[i - 1]// The starting time is of the previous' finishing time
+        }
+      }
+      wt[i] = st[i] - at[i] // waiting time= turnaround time- cpu bound
+      ta[i] = ft[i] - at[i] // turnaround time= Finishing time- arrival time
+      rt[i] = st[i] - at[i] // wt==rt
+      avgwt += wt[i].toFloat() // total waiting time
+      avgta += ta[i].toFloat() // total turnaround time
+      avgrt += rt[i].toFloat() // total response time
+    }
+    //guntt chart
+    print("\n\t Guntt Chart\n\t|")
+    for (i in 0 until n)
+    {
+      print(" P" + pro[i] + " |")
+    }
+    for (i in 0 until n)
+    {
+      if (i == 0)
+      {
+        print("\n\t" + st[i])
+      }
+      print(" " + ft[i])
+    }
+    println("\n\nPro\tCB\tAT\tST\tFT\tWT\tTT\tRT")
+    for (i in 0 until n)
+    {
+      println("P" + pro[i] + "\t" + cb[i] + "\t" + at[i] + "\t" + st[i] + "\t" + ft[i] + "\t" + wt[i] + "\t" + ta[i] + "\t" + rt[i])
+    }
+    println("\n*Average waiting time: " + (avgwt / n))
+    println("*Average turnaround time:" + (avgta / n))
+    println("*Average response time:" + (avgrt / n))
+  }
+}

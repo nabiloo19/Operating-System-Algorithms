@@ -1,0 +1,78 @@
+package Lab1;
+
+import java.util.Scanner;
+import Lab2.*;
+import Lab3.*;
+
+/**
+ *
+ * @author Team-Lion: Natnael Abebaw,Nabil Mohammed,Minilik Seyoum, Abel
+ * Gizachew,Sufyan Mohammed
+ */
+public class All {
+
+    static Scanner input = new Scanner(System.in);
+
+    public static void main(String[] args) {
+
+        int choice;
+
+        //Object creation for all classes
+        FirstCome alg1 = new FirstCome();
+        ShortJob alg2 = new ShortJob();
+        Round alg3 = new Round();
+        Priority alg4 = new Priority();
+        Srtf alg5 = new Srtf();
+        Fifo alg6 = new Fifo();
+        
+        /*
+        * @1st, 2nd and 4th Algorithms have the same procedure where sorting algorithms were just rotating.
+        */
+
+        do {
+            System.out.println("->Which Cpu Scheduling Algorithm or Paging Scheduling You Want to Calculate?");
+            System.out.println("    1,First Come First Serve(FCFS)");
+            System.out.println("    2,Shortest Job First(SJF)");
+            System.out.println("    3,Round Robin(RR)");
+            System.out.println("    4,Priority");
+            System.out.println("    5,Shortest Remaining Time First(SRTF)");
+            System.out.println("    6,First in First out(FIFO");
+            System.out.println("    0,Exit");
+
+            System.out.print("Select->");
+            choice = input.nextInt();
+
+            switch (choice) {
+                case 1:
+                    alg1.calFirst();
+                    break;
+                case 2:
+                    alg2.calShort();
+                    break;
+                case 3:
+                    alg3.calRound();
+                    break;
+                case 4:
+                    alg4.calPriority();
+                    break;
+                case 5:
+                    alg5.calSrtf();
+                    break;
+                case 6:
+                    alg6.calFifo();
+                    break;
+                case 0:
+                    System.exit(0);
+                    break;
+                default:
+                    System.out.println("Invalid Input!");
+                    break;
+            }
+
+            System.out.println("\n->press Any Integer to return, 0 to Exit!");
+            choice = input.nextInt();
+
+        } while (choice != 0);
+        input.close();
+    }
+}

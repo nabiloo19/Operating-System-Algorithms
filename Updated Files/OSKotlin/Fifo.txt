@@ -1,0 +1,83 @@
+package Lab3
+import java.util.Scanner
+class Fifo {
+  internal var `in` = Scanner(System.`in`)
+  internal var frameNo:Array<String>//frame number to store different values
+  internal var pageString:Array<String>//to store array of page string
+  internal var dispaly:Array<Array<String>>//final output. A two dimensional array
+  internal var framesLen:Int = 0
+  internal var pageLen:Int = 0//frame number,page lenght
+  internal var memoAdd = 0
+  internal var pageFault = 0//memory address,page fault
+  fun calFifo() {
+    print("\nHow many no of Page Strings: ")
+    pageLen = `in`.nextInt()
+    pageString = arrayOfNulls<String>(pageLen)
+    `in`.nextLine()
+    println("List Page Strings: ")
+    for (i in 0 until pageLen)
+    {
+      pageString[i] = `in`.nextLine()
+    }
+    print("Enter the number of Frames: ")
+    framesLen = `in`.nextInt()
+    frameNo = arrayOfNulls<String>(framesLen)
+    dispaly = Array<Array<String>>(pageLen, {arrayOfNulls<String>(framesLen)})
+    for (j in 0 until framesLen)
+    {
+      frameNo[j] = " "
+    }
+    println()
+    for (i in 0 until pageLen)
+    {
+      val Find = " "
+      for (j in 0 until framesLen)
+      {
+        if (frameNo[j] == pageString[i])
+        {
+          Find = Integer.toString(j)
+          break
+        }
+      }
+      if (Find == " ")
+      {
+        frameNo[memoAdd] = pageString[i]
+        pageFault++
+        memoAdd++
+        if (memoAdd == framesLen)
+        {
+          memoAdd = 0
+        }
+      }
+      for (j in 0 until framesLen)
+      {
+        dispaly[i][j] = frameNo[j]
+      }
+    }
+    for (i in 0 until pageLen)
+    {
+      print(pageString[i] + " ")
+    }
+    println()
+    for (i in 0 until pageLen)
+    {
+      print("``" + " ")
+    }
+    println()
+    for (i in framesLen - 1 downTo 0)
+    {
+      for (j in 0 until pageLen)
+      {
+        System.out.printf(dispaly[j][i] + " ")
+      }
+      println()
+    }
+    println()
+    for (i in 0 until pageLen)
+    {
+      print("``" + " ")
+    }
+    println("\nPage Fault: " + pageFault)
+    println("Page Fault Rate: " + pageFault.toFloat() / pageLen)
+  }
+}

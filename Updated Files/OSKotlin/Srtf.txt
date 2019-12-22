@@ -1,0 +1,90 @@
+package Lab3
+import java.util.Scanner
+class Srtf {
+  internal var `in` = Scanner(System.`in`)
+  fun calSrtf() {
+    print("\nHow many no of Processes:- ")
+    val n = `in`.nextInt()
+    val pro = Array<IntArray>(n + 1, {IntArray(4)})//pro[][0] is the AT array,[][1] - RT,[][2] - WT,[][3] - TT
+    println(("\nEnter Cpu Bound And Arrival Time.\n!" + "press Tab between CB and AT!"))
+    println("\nPro\tCB\tAT")
+    println("```\t```\t```")
+    for (i in 1..n)
+    {
+      print("P" + i + "\t")
+      pro[i][1] = `in`.nextInt()
+      pro[i][0] = `in`.nextInt()
+    }
+    println()
+    //Calculation of Total Time and Initialization of Time Chart array
+    val total_time = 0
+    for (i in 1..n)
+    {
+      total_time += pro[i][1]
+    }
+    val time_chart = IntArray(total_time)
+    for (i in 0 until total_time)
+    {
+      //Selection of shortest process which has arrived
+      val sel_proc = 0
+      val min = 99999
+      for (j in 1..n)
+      {
+        if (pro[j][0] <= i)
+        //Condition to check if Process has arrived
+        {
+          if (pro[j][1] < min && pro[j][1] != 0)
+          {
+            min = pro[j][1]
+            sel_proc = j
+          }
+        }
+      }
+      //Assign selected process to current time in the Chart
+      time_chart[i] = sel_proc
+      //Decrement Remaining Time of selected process by 1 since it has been assigned the CPU for 1 unit of time
+      pro[sel_proc][1]--
+      //WT and TT Calculation
+      for (j in 1..n)
+      {
+        if (pro[j][0] <= i)
+        {
+          if (pro[j][1] != 0)
+          {
+            pro[j][3]++//If process has arrived and it has not already completed execution its TT is incremented by 1
+            if (j != sel_proc)
+            //If the process has not been currently assigned the CPU and has arrived its WT is incremented by 1
+            {
+              pro[j][2]++
+            }
+          }
+          else if (j == sel_proc)
+          //This is a special case in which the process has been assigned CPU and has completed its execution
+          {
+            pro[j][3]++
+          }
+        }
+      }
+    }
+    println()
+    println()
+    //Printing the WT and TT for each Process
+    println("\n\nPro\tCB\tAT\tWT\tTT\tRT")
+    for (i in 1..n)
+    {
+      println("P" + i + "\t" + pro[i][1] + "\t" + pro[i][0] + "\t" + pro[i][2] + "\t" + pro[i][3])
+    }
+    //Printing the average WT & TT
+    val WT = 0f
+    val TT = 0f
+    for (i in 1..n)
+    {
+      WT += pro[i][2].toFloat()
+      TT += pro[i][3].toFloat()
+    }
+    WT /= n.toFloat()
+    TT /= n.toFloat()
+    println("The Average WT is: " + WT + "ms")
+    println("The Average TT is: " + TT + "ms")
+  }
+}
